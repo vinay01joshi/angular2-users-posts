@@ -17,4 +17,18 @@ export class UsersComponent implements OnInit {
         this._userService.getUsers()
             .subscribe(users => this.users = users);
     }
+
+    deleteUser(user){
+        if(confirm("Are you sure you want to delete" + user.name + "?")){
+            var index = this.users.indexOf(user);
+
+            this.users.splice(index,1);
+            this._userService.deletUser(user.id)
+                .subscribe(null,
+                err => {
+                    alert('Could not delete user.');
+                this.users.splice(index,0,user);
+                });
+        }
+    }
 }
