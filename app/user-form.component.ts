@@ -1,19 +1,23 @@
-import { Component } from "angular2/core";
+import { Component, OnInit } from "angular2/core";
 import { ControlGroup, FormBuilder, Validators } from "angular2/common";
 import { BasicValidators } from "./basicValidators";
-import { CanDeactivate, Router } from "angular2/router";
+import { CanDeactivate, Router, RouteParams } from "angular2/router";
 import { UserService } from "./user.service";
+import { User } from "./user";
 
 @Component({
     templateUrl : 'app/user-form.component.html',
     providers:[UserService]
 })
-export class UserFormComponent implements CanDeactivate{
+export class UserFormComponent implements OnInit, CanDeactivate{
     form: ControlGroup;
+    title;
+    user = new User();
     constructor(
         fb: FormBuilder,
         private _userService : UserService, 
-        private _router : Router){
+        private _router : Router,
+        private _routeParams : RouteParams){
        
             this.form = fb.group({
             name : ['',Validators.required],
@@ -28,6 +32,24 @@ export class UserFormComponent implements CanDeactivate{
         });
     }
 
+    ngOnInit() {
+      var id = this._routeParams.get("id");
+
+      this.title = id ? "Edit User" :"Add User";
+
+      if(!id)
+        return
+
+      this._userService.getUser(id)
+            .subscribe(user=> this.user = user,
+                      response => {
+                          if(response.status == "400"){
+                              this._router.navigate(['NotFound'])
+                          }
+
+                    });
+      
+    }
     routerCanDeactivate() {
         if(this.form.dirty)
             return confirm('You have unsaved changes. Are you want to navigate away?');

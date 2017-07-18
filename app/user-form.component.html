@@ -1,4 +1,4 @@
-<h1>Add a User</h1>
+<h1>{{ title }}</h1>
 <div class="row">
     <div class="col-md-6 well">
         <form [ngFormModel]="form" (submit)="save()">
@@ -6,7 +6,7 @@
                 <legend>User</legend>
                 <div class="form-group">
                     <label>Name</label>
-                    <input type="text" class="form-control" ngControl="name" #name="ngForm">
+                    <input type="text" class="form-control" ngControl="name" #name="ngForm" [(ngModel)]="user.name">
                     <div
                         *ngIf="name.touched && !name.valid" 
                         class="alert alert-danger">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="text" class="form-control" ngControl="email" #email="ngForm">
+                    <input type="text" class="form-control" ngControl="email" #email="ngForm" [(ngModel)]="user.email">
                     <div
                         *ngIf="email.touched && !email.valid" 
                         class="alert alert-danger">
@@ -24,26 +24,26 @@
                 </div>
                 <div class="form-group">
                     <label>Phone</label>
-                    <input type="text" class="form-control" ngControl="phone">
+                    <input type="text" class="form-control" ngControl="phone"  [(ngModel)]="user.phone">
                 </div>
             </fieldset>
             <fieldset ngControlGroup="address">
                 <legend>Address</legend>
                 <div class="form-group">
                     <label>Street</label>
-                    <input type="text" class="form-control" ngControl="street">
+                    <input type="text" class="form-control" ngControl="street" [(ngModel)]="user.address.street">
                 </div>
                 <div class="form-group">
                     <label>Suite</label>
-                    <input type="text" class="form-control" ngControl="suite">
+                    <input type="text" class="form-control" ngControl="suite" [(ngModel)]="user.address.suite">
                 </div>
                 <div class="form-group">
                     <label>City</label>
-                    <input type="text" class="form-control" ngControl="city">
+                    <input type="text" class="form-control" ngControl="city" [(ngModel)]="user.address.city">
                 </div>
                 <div class="form-group">
                     <label>ZipCode</label>
-                    <input type="text" class="form-control" ngControl="zipcode">
+                    <input type="text" class="form-control" ngControl="zipcode" [(ngModel)]="user.address.zipcode">
                 </div>
             </fieldset>
             <button [disabled]="!form.valid" class="btn btn-primary" type="submit">Save</button>
