@@ -43,7 +43,7 @@ export class UserFormComponent implements OnInit, CanDeactivate{
       this._userService.getUser(id)
             .subscribe(user=> this.user = user,
                       response => {
-                          if(response.status == "400"){
+                          if(response.status == "404"){
                               this._router.navigate(['NotFound'])
                           }
 
@@ -56,10 +56,19 @@ export class UserFormComponent implements OnInit, CanDeactivate{
 
         return true;
     }
+
     save(){
-        this._userService.addUser(this.form.value)
-            .subscribe(x=> {
-                this._router.navigate(['Users']);
-            });
-    }
+       var result;
+        
+        if (this.user.id) 
+            result = this._userService.updateUser(this.user);
+        else
+            result = this._userService.addUser(this.user)
+            
+		result.subscribe(x => {
+            // Ideally, here we'd want:
+            // this.form.markAsPristine();
+            this._router.navigate(['Users']);
+        });
+    }    
 }
