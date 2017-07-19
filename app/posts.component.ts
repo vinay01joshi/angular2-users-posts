@@ -9,7 +9,7 @@ import { SpinnerComponent } from "./spinner.component";
     .posts li {
         cursor : default;
     }
-    .posts list:hover {
+    .posts li:hover {
         background : #ecf0f1;
     }
     .list-group-item.active,
@@ -37,5 +37,8 @@ export class PostsComponent  implements OnInit{
 
     select(post) {
         this.currentPost = post;
+        
+        this._postService.getComments(post.id)
+            .subscribe(comments => this.currentPost.comments = comments)
     }
 }
