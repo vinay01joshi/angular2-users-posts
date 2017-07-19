@@ -25,7 +25,7 @@ import { SpinnerComponent } from "./spinner.component";
 })
 export class PostsComponent  implements OnInit{
     posts : [any];
-    isLoading= true;
+    isPostLoading= true;
     isCommentLoading;
     currentPost;
     constructor(private _postService: PostService) {
@@ -33,7 +33,7 @@ export class PostsComponent  implements OnInit{
    } 
     ngOnInit() {
         this._postService.getPosts()
-            .subscribe(posts=> this.posts = posts,null,()=> {this.isLoading = false});
+            .subscribe(posts=> this.posts = posts,null,()=> {this.isPostLoading = false});
     }
 
     select(post) {
