@@ -3,6 +3,7 @@ import { Component, OnInit } from "angular2/core";
 import { PostService } from "./post.service";
 import { SpinnerComponent } from "./spinner.component";
 import { UserService } from "./user.service";
+import { PaginationComponent } from "./pagination.component";
 
 @Component({
     templateUrl :'app/posts.component.html',
@@ -22,14 +23,16 @@ import { UserService } from "./user.service";
     }
     `],
     providers : [PostService,UserService],
-    directives : [SpinnerComponent]
+    directives : [SpinnerComponent,PaginationComponent]
 })
 export class PostsComponent  implements OnInit{
-    posts : [any];
-    users : [any];
+    posts = [];
+    pagedPosts=[];
+    users = [];
     isPostLoading;
     isCommentLoading;
     currentPost;
+    pageSize = 10;
     constructor(private _postService: PostService , private _userService : UserService) {
 
    } 
@@ -41,7 +44,10 @@ export class PostsComponent  implements OnInit{
     loadPosts(filter?){
         this.isPostLoading = true;        
         this._postService.getPosts(filter)
-            .subscribe(posts=> this.posts = posts,null,()=> {this.isPostLoading = false});
+            .subscribe(posts=> {
+                 this.posts = posts;
+                 this.pagedPosts = _.take(this.posts,this.pageSize); //this.getPostInPage(1);
+            },null,()=> {this.isPostLoading = false});
     }
 
     loadUsers(){
@@ -61,4 +67,22 @@ export class PostsComponent  implements OnInit{
         this.currentPost = null;
         this.loadPosts(filter);
     }
+
+    onPageChanged(page){
+        var startIndex = (page -1) * this.pageSize;
+        this.pagedPosts = _.take(_.rest(this.posts,startIndex),this.pageSize);  //this.getPostInPage(page);
+    }
+
+    // private getPostInPage(page){
+    //     var result = []
+
+    //     var startingIndex = (page -1) * this.pageSize ;
+
+    //     var endIndex = Math.min(startingIndex + this.pageSize ,this.posts.length);
+
+    //     for(var i = startingIndex ; i < endIndex ; i++)
+    //             result.push(this.posts[i]);
+
+    //     return result;
+    // }
 }
