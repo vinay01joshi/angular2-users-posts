@@ -12,6 +12,7 @@ typings/
 
 #excluding log files
 *.log
+*.log.*
 
 # not commiting js files
 app/**/*.js
